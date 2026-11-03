@@ -10,10 +10,9 @@ async function handleGenrateNewshortUrl(req,res){
         redirectURL:body.url
     });
     if(existingURL){
-        return res.status(409).json({
-            error:"URL already exist",
-            id:existingURL.ShortID
-        })
+       return res.render("home",{
+        id:existingURL.ShortID
+       })
     }
     await URL.create({
         ShortID:shortID,
@@ -21,7 +20,10 @@ async function handleGenrateNewshortUrl(req,res){
         visitHistory:[],
 
     })
-    return res.json({id:shortID});
+    return res.render('home',{
+        id:shortID,
+    });
+    
 
 
 }

@@ -1,8 +1,10 @@
 const express = require("express");
+const path = require("path");
 
 const {connectToMongo} = require('./connections');
 
 const urlroute=require('./routes/url');
+const staticRoute=require("./routes/staticRouter");
 const URL=require("./models/url");
 
 const app = express();
@@ -14,7 +16,17 @@ connectToMongo('mongodb://localhost:27017/short-url')
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+
+app.set("view engine","ejs");
+app.set("views",path.resolve("./views"));
+
+
+
+
+
 app.use("/url",urlroute);
+
+app.use("/",staticRoute);
 
 app.get("/:ShortID",async(req,res)=>{
     const  shortid=req.params.ShortID;
@@ -30,6 +42,7 @@ app.get("/:ShortID",async(req,res)=>{
         },
     }
  );
+ if (!entry) return res.status(404).send("Short URL not found");
  res.redirect(entry.redirectURL);
 
 })
