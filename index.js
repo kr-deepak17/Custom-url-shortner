@@ -8,6 +8,7 @@ const {restrictToLoggedinUsersOnly,checkAuth}=require("./middlewares/auth");
 
 const URL=require("./models/url");
 
+//registering the route
 const urlroute=require('./routes/url');
 const staticRoute=require("./routes/staticRouter");
 const userRoute=require("./routes/user");
@@ -52,6 +53,6 @@ app.get("/:ShortID",async(req,res)=>{
 
 })
 
-// app.get("/analytics/:ShortID");
+// app.get("/analytics/:ShortID");;
 
-app.listen(PORT,()=>console.log(`Server started at PORT :${PORT}`));
+app.listen(PORT,()=>console.log(`Server started at PORT :${PORT}`))
