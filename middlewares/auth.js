@@ -16,6 +16,5 @@ async function checkAuth(req,res,next){
     const user = getUser(userUid);
     req.user=user;
     next();
-
 }
 module.exports={restrictToLoggedinUsersOnly,checkAuth,}
