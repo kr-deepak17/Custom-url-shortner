@@ -2,7 +2,7 @@ const {getUser}=require("../service/auth");
 
 function checkForAuthentication(req,res,next){
     req.user=null;
-    const tokenCookie=req.cookies?.token;
+    const tokenCookie=req.cookies?.token
     if(!tokenCookie){
         return next();
     }
