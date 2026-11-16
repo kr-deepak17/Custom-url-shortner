@@ -3,7 +3,7 @@ const path = require("path");
 const cookieParser =require("cookie-parser");
 
 const {connectToMongo} = require('./connections');
-const {restrictToLoggedinUsersOnly,checkAuth}=require("./middlewares/auth");
+const {checkForAuthentication,restrictTo}=require("./middlewares/auth");
 
 
 const URL=require("./models/url");
@@ -20,19 +20,18 @@ const PORT=8001;
 connectToMongo('mongodb://localhost:27017/short-url')
 .then(()=>console.log("mongoDb conneted"));
 
+app.set("view engine","ejs");
+app.set("views",path.resolve("./views"));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+app.use(checkForAuthentication);
 
-app.set("view engine","ejs");
-app.set("views",path.resolve("./views"));
-
-
-
-app.use("/url",restrictToLoggedinUsersOnly,urlroute);
+app.use("/url",restrictTo(["NORMAL","ADMIN"]),urlroute);
 app.use("/user",userRoute);
-app.use("/",checkAuth,staticRoute);
+app.use("/",staticRoute);
 
 app.get("/:ShortID",async(req,res)=>{
     const  shortid=req.params.ShortID;
