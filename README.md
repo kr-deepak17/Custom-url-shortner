@@ -1,122 +1,128 @@
 # 🔗 Custom URL Shortener with Authentication & Authorization
 
-A full-stack URL Shortener application built using **Node.js, Express.js, MongoDB, Mongoose, and EJS**. The application allows users to generate short URLs, track link visits, and manage their URLs through an authenticated dashboard.
+<div align="center">
 
-It also implements **JWT-based authentication, cookie-based token storage, middleware-based authorization, and role-based access control (RBAC)** for managing user permissions.
+### 🚀 Transform Long URLs into Short Links
 
-## 🚀 Features
+A backend project built with Node.js, Express.js, MongoDB and JWT Authentication.
+
+<p>
+<img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white"/>
+<img src="https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white"/>
+<img src="https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white"/>
+<img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white"/>
+<img src="https://img.shields.io/badge/EJS-B4CA65?style=for-the-badge&logo=ejs&logoColor=black"/>
+</p>
+
+</div>
+
+---
+
+## 📌 About The Project
+
+This project is a **Custom URL Shortener** that allows users to convert long URLs into short, shareable links.
+
+It also includes a complete authentication and authorization system using **JWT, Cookies, Express Middleware and Role-Based Access Control (RBAC)**.
+
+Users can generate short URLs, track link visits, and view analytics through their dashboard. Admin users have additional privileges to access and manage URL records.
+
+## ✨ Features
 
 ### 🔗 URL Shortening
 - Generate unique short URLs using Short ID.
-- Redirect short URLs to their original destinations.
-- Prevent duplicate URL entries.
+- Redirect short URLs to original destinations.
 - Store URL records in MongoDB.
-- Track visit history with timestamps.
-- Calculate total clicks for each URL.
+- Track individual URL visits.
+- Maintain visit history with timestamps.
+- Calculate total clicks.
 
 ### 🔐 Authentication
-- User Signup and Login functionality.
+- User Signup and Login.
 - JWT-based authentication.
-- Cookie-based token storage using Cookie Parser.
-- Authentication middleware to identify logged-in users.
-- JWT verification for validating user sessions.
+- Cookie-based token storage.
+- Authentication middleware.
+- JWT verification for user identification.
+- Protected routes.
 
-### 🛡️ Authorization & Role-Based Access Control
-- Role-based access control (RBAC).
+### 🛡️ Authorization & RBAC
+- Role-Based Access Control.
 - Two user roles: `NORMAL` and `ADMIN`.
-- Higher-level access restrictions using authorization middleware.
-- Normal users can access their own URLs.
-- Admin users can access all users' URLs.
-- Protected routes using Express middleware.
-- Closure-based `restrictTo()` middleware for role checking.
+- Custom authorization middleware.
+- Closure-based `restrictTo()` function.
+- Restrict access based on user roles.
+- Admin-specific routes and dashboard.
 
 ### 📊 URL Analytics
-- Track individual URL visits.
+- Track individual link visits.
 - Store timestamps for every visit.
-- Display URL records in a dashboard.
-- Retrieve analytics using a dedicated endpoint.
+- Calculate total clicks.
+- Retrieve analytics using a dedicated API endpoint.
 
-### 🖥️ Server-Side Rendering
-- Dynamic pages rendered using EJS.
-- Login and Signup pages.
+### 🖥️ Dashboard
+- Dynamic pages using EJS.
 - User-specific URL dashboard.
-- Admin dashboard for viewing all URLs.
+- Admin dashboard.
+- Login and Signup pages.
+
+---
 
 ## 🧰 Tech Stack
 
 | Technology | Purpose |
 |---|---|
-| Node.js | JavaScript Runtime |
-| Express.js | Backend Framework |
-| MongoDB | Database |
-| Mongoose | Database Modeling |
-| EJS | Server-Side Rendering |
-| JWT | Authentication |
-| Cookie Parser | Cookie Management |
-| Short ID | Unique URL Generation |
-| JavaScript | Backend Logic |
-| HTML & CSS | Frontend |
+| 🟢 Node.js | JavaScript Runtime |
+| ⚡ Express.js | Backend Framework |
+| 🍃 MongoDB | Database |
+| ODM Mongoose | Database Modeling |
+| 🔑 JWT | Authentication |
+| 🍪 Cookie Parser | Cookie Management |
+| 🎨 EJS | Server-Side Rendering |
+| 🔗 Short ID | Unique URL Generation |
+| 💻 JavaScript | Backend Logic |
 
-## ⚙️ Installation & Setup
+---
 
-### 1. Clone the Repository
+## 🏗️ Application Architecture
 
-```bash
-git clone https://github.com/kr-deepak17/Custom-url-shortner.git
+```mermaid
+flowchart TD
+    A[Client / Browser] --> B[Express Server]
+    B --> C[Authentication Middleware]
+    C --> D{JWT Valid?}
+    D -->|No| E[Login / Signup]
+    D -->|Yes| F[req.user]
+    F --> G[Authorization Middleware]
+    G --> H{User Role}
+    H -->|NORMAL| I[User Dashboard]
+    H -->|ADMIN| J[Admin Dashboard]
+    I --> K[URL Controllers]
+    J --> K
+    K --> L[(MongoDB)]
+    L --> M[URL Analytics]
 ```
 
-### 2. Navigate to the Project
-
-```bash
-cd Custom-url-shortner
-```
-
-### 3. Install Dependencies
-
-```bash
-npm install
-```
-
-### 4. Start MongoDB
-
-Make sure MongoDB is running locally.
-
-The application currently uses:
-
-```text
-mongodb://localhost:27017/short-url
-```
-
-### 5. Start the Server
-
-```bash
-npm start
-```
-
-The application runs at:
-
-```text
-http://localhost:8001
-```
+---
 
 ## 🔄 Authentication Flow
 
-1. User registers using the Signup page.
+1. User registers through the Signup page.
 2. User logs in using email and password.
 3. Server verifies the credentials.
-4. JWT token is generated using `jsonwebtoken`.
-5. Token is stored in an HTTP cookie.
-6. Authentication middleware extracts and verifies the token.
-7. Decoded user information is attached to `req.user`.
-8. Authorization middleware checks the user's role before granting access.
+4. JWT token is generated.
+5. Token is stored in a browser cookie.
+6. Authentication middleware extracts the token.
+7. JWT is verified using the secret key.
+8. Decoded user information is attached to `req.user`.
+9. Authorization middleware checks the user's role.
 
-## 🛡️ Authorization Middleware
+## 🛡️ Role-Based Authorization
 
-The project uses a closure-based middleware to implement role-based authorization.
+The project uses a closure-based `restrictTo()` middleware.
 
 ```javascript
 function restrictTo(roles = []) {
     return function(req, res, next) {
+
         if (!req.user) {
             return res.redirect("/login");
         }
@@ -130,33 +136,32 @@ function restrictTo(roles = []) {
 }
 ```
 
-This middleware checks whether the authenticated user's role is included in the permitted roles.
+The middleware allows access only when the authenticated user's role matches the permitted roles.
 
-## 📌 Application Routes
+### 👥 User Roles
+
+| Role | Permissions |
+|---|---|
+| `NORMAL` | Generate URLs and access personal dashboard |
+| `ADMIN` | Access admin dashboard and all URL records |
+
+---
+
+## 📡 Application Routes
 
 | Method | Endpoint | Description |
 |---|---|---|
-| GET | `/` | User dashboard |
-| GET | `/signup` | Signup page |
-| GET | `/login` | Login page |
-| POST | `/user/` | Register a new user |
-| POST | `/user/login` | Authenticate user |
-| POST | `/url/` | Generate a short URL |
-| GET | `/url/analytics/:ShortID` | Get URL analytics |
-| GET | `/admin/urls` | Admin dashboard |
-| GET | `/:ShortID` | Redirect to original URL |
+| GET | `/` | User Dashboard |
+| GET | `/signup` | Signup Page |
+| GET | `/login` | Login Page |
+| POST | `/user/` | Register User |
+| POST | `/user/login` | User Login |
+| POST | `/url/` | Generate Short URL |
+| GET | `/url/analytics/:ShortID` | URL Analytics |
+| GET | `/admin/urls` | Admin Dashboard |
+| GET | `/:ShortID` | Redirect to Original URL |
 
-## 👥 User Roles
-
-**NORMAL**
-- Access personal dashboard.
-- Generate short URLs.
-- View personal URL records.
-
-**ADMIN**
-- Access admin dashboard.
-- View URL records across all users.
-- Access routes restricted to administrators.
+---
 
 ## 📁 Project Structure
 
@@ -164,6 +169,7 @@ This middleware checks whether the authenticated user's role is included in the 
 urlShortner/
 │
 ├── connections.js
+│
 ├── controllers/
 │   ├── url.js
 │   └── user.js
@@ -193,39 +199,95 @@ urlShortner/
 └── README.md
 ```
 
-## 🧠 Key Concepts Learned
+---
 
-- RESTful routing with Express.js.
-- MongoDB CRUD operations using Mongoose.
-- JWT-based authentication.
-- Cookies and session management concepts.
-- Authentication vs Authorization.
-- Role-Based Access Control (RBAC).
-- Express middleware and middleware chaining.
-- JavaScript Closures.
-- Protected routes.
-- Server-Side Rendering with EJS.
-- Database relationships and user-specific data.
-- Git and GitHub version control.
+## ⚙️ Installation & Setup
 
-## 🔮 Future Improvements
+### 1️⃣ Clone Repository
 
-- [ ] Password hashing using bcrypt.
-- [ ] JWT expiration and refresh token mechanism.
-- [ ] HTTP-only and secure cookie configuration.
-- [ ] Custom URL aliases.
-- [ ] URL expiration functionality.
-- [ ] Improved analytics dashboard.
-- [ ] Deployment to a cloud platform.
+```bash
+git clone https://github.com/kr-deepak17/Custom-url-shortner.git
+```
 
-## 👨‍💻 Author
+### 2️⃣ Navigate to Project
 
-**Deepak Kumar**
+```bash
+cd Custom-url-shortner
+```
 
-GitHub: [@kr-deepak17](https://github.com/kr-deepak17)
+### 3️⃣ Install Dependencies
+
+```bash
+npm install
+```
+
+### 4️⃣ Start MongoDB
+
+Make sure MongoDB is running locally.
+
+```text
+mongodb://localhost:27017/short-url
+```
+
+### 5️⃣ Run the Application
+
+```bash
+npm start
+```
+
+Open your browser:
+
+```text
+http://localhost:8001
+```
 
 ---
 
-<p align="center">
-  Built with ❤️ using Node.js, Express.js and MongoDB
-</p>
+## 🧠 Key Concepts Learned
+
+- REST API Development
+- Express.js Routing
+- Middleware & Middleware Chaining
+- JWT Authentication
+- Cookies & Token Management
+- Authentication vs Authorization
+- Role-Based Access Control (RBAC)
+- JavaScript Closures
+- MongoDB CRUD Operations
+- Mongoose Schemas & Models
+- URL Redirection
+- Server-Side Rendering with EJS
+
+---
+
+## 🔮 Future Improvements
+
+- [ ] Password Hashing using bcrypt
+- [ ] JWT Expiration & Refresh Tokens
+- [ ] Secure HTTP-only Cookies
+- [ ] Custom URL Aliases
+- [ ] URL Expiration Functionality
+- [ ] Improved Analytics Dashboard
+- [ ] Deployment to Cloud
+
+---
+
+## 👨‍💻 Author
+
+<div align="center">
+
+### Deepak Kumar
+
+B.Tech CSE (AI) | Backend Developer | DSA Enthusiast
+
+<a href="https://github.com/kr-deepak17">
+<img src="https://img.shields.io/badge/GitHub-kr--deepak17-181717?style=for-the-badge&logo=github"/>
+</a>
+
+---
+
+⭐ **If you like this project, don't forget to give it a star!**
+
+*Built with ❤️ using Node.js & Express.js*
+
+</div>
