@@ -1,274 +1,222 @@
-# 🔗 Custom URL Shortener
+# 🔗 Custom URL Shortener with Authentication & Authorization
 
-A URL Shortener built from scratch using **Node.js, Express.js, MongoDB, and EJS**. This project converts long URLs into short, shareable links, redirects users to their original destinations, and tracks link visits.
+A full-stack URL Shortener application built using **Node.js, Express.js, MongoDB, Mongoose, and EJS**. The application allows users to generate short URLs, track link visits, and manage their URLs through an authenticated dashboard.
 
-The application also implements **Server-Side Rendering (SSR)** using EJS to render a dynamic home page and display URL analytics directly from the server.
+It also implements **JWT-based authentication, cookie-based token storage, middleware-based authorization, and role-based access control (RBAC)** for managing user permissions.
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js" />
-  <img src="https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white" alt="Express.js" />
-  <img src="https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white" alt="MongoDB" />
-  <img src="https://img.shields.io/badge/EJS-B4CA65?style=for-the-badge&logo=ejs&logoColor=black" alt="EJS" />
-  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript" />
-</p>
+## 🚀 Features
 
----
+### 🔗 URL Shortening
+- Generate unique short URLs using Short ID.
+- Redirect short URLs to their original destinations.
+- Prevent duplicate URL entries.
+- Store URL records in MongoDB.
+- Track visit history with timestamps.
+- Calculate total clicks for each URL.
 
-## ✨ Features
+### 🔐 Authentication
+- User Signup and Login functionality.
+- JWT-based authentication.
+- Cookie-based token storage using Cookie Parser.
+- Authentication middleware to identify logged-in users.
+- JWT verification for validating user sessions.
 
-- **Short URL Generation** — Convert long URLs into compact, shareable links.
-- **Unique Short IDs** — Generate unique identifiers for URL mappings.
-- **URL Redirection** — Redirect users to the original destination using a short URL.
-- **Duplicate URL Handling** — Check whether a URL already exists before creating a new mapping.
-- **Click Tracking** — Track the number of visits to each short URL.
-- **Visit History** — Store visit timestamps in MongoDB.
-- **Analytics Dashboard** — Display short IDs, original URLs, and total clicks in a table.
-- **Server-Side Rendering (SSR)** — Render dynamic HTML pages on the server using EJS.
-- **Dynamic Home Page** — Display the generated short URL on the home page after form submission.
-- **MongoDB Integration** — Persist URL mappings and visit history using Mongoose.
-- **Express Routing** — Handle URL generation, redirection, and analytics requests.
+### 🛡️ Authorization & Role-Based Access Control
+- Role-based access control (RBAC).
+- Two user roles: `NORMAL` and `ADMIN`.
+- Higher-level access restrictions using authorization middleware.
+- Normal users can access their own URLs.
+- Admin users can access all users' URLs.
+- Protected routes using Express middleware.
+- Closure-based `restrictTo()` middleware for role checking.
 
-## 🖥️ Application Preview
+### 📊 URL Analytics
+- Track individual URL visits.
+- Store timestamps for every visit.
+- Display URL records in a dashboard.
+- Retrieve analytics using a dedicated endpoint.
 
-### Home Page
-
-The home page allows users to enter an original URL and generate a short link. After submission, the generated short URL is displayed on the page using EJS.
-
-### URL Analytics Dashboard
-
-The dashboard displays saved URL records in a table, including:
-
-- Serial number
-- Short ID
-- Original destination URL
-- Total number of clicks
-
-This makes it easy to view and monitor the URLs created by the application.
+### 🖥️ Server-Side Rendering
+- Dynamic pages rendered using EJS.
+- Login and Signup pages.
+- User-specific URL dashboard.
+- Admin dashboard for viewing all URLs.
 
 ## 🧰 Tech Stack
 
 | Technology | Purpose |
 |---|---|
-| Node.js | JavaScript runtime |
-| Express.js | Backend server and routing |
-| MongoDB | Database for storing URL records |
-| Mongoose | MongoDB object modeling and queries |
-| EJS | Dynamic HTML templating |
-| Server-Side Rendering | Rendering HTML on the server |
-| JavaScript | Application logic |
-| HTML | Structure of the web interface |
-| CSS | Styling the interface |
-| shortid | Generating compact short identifiers |
+| Node.js | JavaScript Runtime |
+| Express.js | Backend Framework |
+| MongoDB | Database |
+| Mongoose | Database Modeling |
+| EJS | Server-Side Rendering |
+| JWT | Authentication |
+| Cookie Parser | Cookie Management |
+| Short ID | Unique URL Generation |
+| JavaScript | Backend Logic |
+| HTML & CSS | Frontend |
 
-## ⚙️ Getting Started
+## ⚙️ Installation & Setup
 
-### Prerequisites
+### 1. Clone the Repository
 
-Make sure the following are installed on your system:
+```bash
+git clone https://github.com/kr-deepak17/Custom-url-shortner.git
+```
 
-- Node.js
-- npm
-- MongoDB
-- Git
+### 2. Navigate to the Project
 
-### 1. Install Dependencies
+```bash
+cd Custom-url-shortner
+```
 
-Open the project directory in your terminal and run:
+### 3. Install Dependencies
 
 ```bash
 npm install
 ```
 
-### 2. Start MongoDB
+### 4. Start MongoDB
 
-Make sure your MongoDB server is running locally.
+Make sure MongoDB is running locally.
 
-The application currently uses the following database connection:
+The application currently uses:
 
 ```text
 mongodb://localhost:27017/short-url
 ```
 
-If you use a different database, update the connection string in your application.
-
-### 3. Start the Application
-
-Run the configured start script:
+### 5. Start the Server
 
 ```bash
 npm start
 ```
 
-Alternatively, if your `package.json` does not contain a start script, run:
-
-```bash
-node index.js
-```
-
-For development with Nodemon, if installed:
-
-```bash
-npx nodemon index.js
-```
-
-### 4. Open the Application
-
-Visit the following address in your browser:
-
-**http://localhost:8001**
-
-Enter a URL in the input field and click **Generate** to create a short link.
-
-## 🔄 How It Works
+The application runs at:
 
 ```text
-User enters an original URL
-          |
-          v
-Express receives the POST request
-          |
-          v
-Check for an existing URL
-          |
-          v
-Generate a unique Short ID
-          |
-          v
-Save URL mapping in MongoDB
-          |
-          v
-Render the home page using EJS
-          |
-          v
-Display the generated short URL
-          |
-          v
-User opens the short URL
-          |
-          v
-Find the matching database record
-          |
-          v
-Update visit history
-          |
-          v
-Redirect to the original destination
-          |
-          v
-Display updated click analytics
+http://localhost:8001
 ```
 
-## 🖥️ Server-Side Rendering (SSR) with EJS
+## 🔄 Authentication Flow
 
-This project uses **EJS (Embedded JavaScript)** as the Express view engine to implement Server-Side Rendering.
+1. User registers using the Signup page.
+2. User logs in using email and password.
+3. Server verifies the credentials.
+4. JWT token is generated using `jsonwebtoken`.
+5. Token is stored in an HTTP cookie.
+6. Authentication middleware extracts and verifies the token.
+7. Decoded user information is attached to `req.user`.
+8. Authorization middleware checks the user's role before granting access.
 
-Instead of constructing the entire interface in the browser, Express renders the HTML on the server and sends the completed page to the client.
+## 🛡️ Authorization Middleware
 
-### How SSR is implemented
-
-- The home page template is stored in `views/home.ejs`.
-- Express passes dynamic data to the EJS template using `res.render()`.
-- After a short URL is generated, the server renders the home page with the generated short ID.
-- EJS conditionally displays the generated URL.
-- URL records and click analytics can be rendered dynamically from database results.
-
-Example:
+The project uses a closure-based middleware to implement role-based authorization.
 
 ```javascript
-return res.render("home", {
-    id: shortID
-});
+function restrictTo(roles = []) {
+    return function(req, res, next) {
+        if (!req.user) {
+            return res.redirect("/login");
+        }
+
+        if (!roles.includes(req.user.role)) {
+            return res.end("Unauthorized");
+        }
+
+        return next();
+    };
+}
 ```
 
-The EJS template can display the generated URL using:
+This middleware checks whether the authenticated user's role is included in the permitted roles.
 
-```ejs
-<% if (locals.id) { %>
-    <p>
-        URL Generated:
-        http://localhost:8001/<%= id %>
-    </p>
-<% } %>
-```
+## 📌 Application Routes
 
-This demonstrates how server-side data can be passed to an EJS template to generate dynamic HTML.
-
-## 🔌 Routes and Functionality
-
-| Method | Endpoint | Purpose |
+| Method | Endpoint | Description |
 |---|---|---|
-| `GET` | `/` | Render the home page and URL dashboard |
-| `POST` | `/url` | Generate a short URL or handle an existing mapping |
-| `GET` | `/:ShortID` | Record a visit and redirect to the original URL |
-| `GET` | `/url/analytics/:ShortID` | Retrieve analytics for a specific short URL, if configured |
+| GET | `/` | User dashboard |
+| GET | `/signup` | Signup page |
+| GET | `/login` | Login page |
+| POST | `/user/` | Register a new user |
+| POST | `/user/login` | Authenticate user |
+| POST | `/url/` | Generate a short URL |
+| GET | `/url/analytics/:ShortID` | Get URL analytics |
+| GET | `/admin/urls` | Admin dashboard |
+| GET | `/:ShortID` | Redirect to original URL |
 
-*Note: The endpoint paths above describe the application's intended functionality. Refer to the actual Express route definitions for the exact paths configured in your project.*
+## 👥 User Roles
 
-## 🗄️ Database Schema
+**NORMAL**
+- Access personal dashboard.
+- Generate short URLs.
+- View personal URL records.
 
-The URL model stores the original destination, its short identifier, and visit history.
-
-| Field | Description |
-|---|---|
-| `ShortID` | Unique identifier used in the short URL |
-| `redirectURL` | Original destination URL |
-| `visitHistory` | Array containing visit records |
-| `timestamp` | Timestamp recorded for an individual visit |
-
-MongoDB stores these records, while Mongoose provides the schema and query functionality used by the application.
+**ADMIN**
+- Access admin dashboard.
+- View URL records across all users.
+- Access routes restricted to administrators.
 
 ## 📁 Project Structure
 
-The application separates database models, route handlers, connection logic, and EJS views.
-
 ```text
 urlShortner/
-├── connections/
-│   └── index.js
+│
+├── connections.js
 ├── controllers/
-│   └── url.js
+│   ├── url.js
+│   └── user.js
+│
+├── middlewares/
+│   └── auth.js
+│
 ├── models/
-│   └── url.js
+│   ├── url.js
+│   └── user.js
+│
 ├── routes/
 │   ├── staticRouter.js
-│   └── url.js
+│   ├── url.js
+│   └── user.js
+│
+├── service/
+│   └── auth.js
+│
 ├── views/
-│   └── home.ejs
+│   ├── home.ejs
+│   ├── login.ejs
+│   └── signup.ejs
+│
 ├── index.js
 ├── package.json
-├── package-lock.json
 └── README.md
 ```
 
-*This is an illustrative structure; keep the names aligned with the files in your actual repository.*
+## 🧠 Key Concepts Learned
 
-## 🧠 What I Learned
+- RESTful routing with Express.js.
+- MongoDB CRUD operations using Mongoose.
+- JWT-based authentication.
+- Cookies and session management concepts.
+- Authentication vs Authorization.
+- Role-Based Access Control (RBAC).
+- Express middleware and middleware chaining.
+- JavaScript Closures.
+- Protected routes.
+- Server-Side Rendering with EJS.
+- Database relationships and user-specific data.
+- Git and GitHub version control.
 
-Through this project, I gained practical experience with:
+## 🔮 Future Improvements
 
-- Building a backend application using Node.js and Express.js.
-- Creating and handling HTTP routes.
-- Processing HTML form submissions.
-- Generating unique short identifiers for URLs.
-- Connecting MongoDB with Mongoose.
-- Designing schemas and querying database records.
-- Implementing URL redirection.
-- Tracking visits and calculating click counts.
-- Implementing Server-Side Rendering using EJS.
-- Passing backend data to dynamic HTML templates.
-- Rendering URL records and analytics in a server-generated page.
-- Managing project versions using Git and GitHub.
-
-## 🔮 Future Enhancements
-
-- [ ] Custom short URL aliases.
-- [ ] User authentication and personalized dashboards.
-- [ ] URL expiration and deletion.
-- [ ] Improved URL validation and error handling.
-- [ ] Responsive UI and improved styling.
-- [ ] QR code generation for short URLs.
-- [ ] Detailed analytics with charts and timestamps.
-- [ ] Deployment to a cloud hosting platform.
+- [ ] Password hashing using bcrypt.
+- [ ] JWT expiration and refresh token mechanism.
+- [ ] HTTP-only and secure cookie configuration.
+- [ ] Custom URL aliases.
+- [ ] URL expiration functionality.
+- [ ] Improved analytics dashboard.
+- [ ] Deployment to a cloud platform.
 
 ## 👨‍💻 Author
 
@@ -276,10 +224,8 @@ Through this project, I gained practical experience with:
 
 GitHub: [@kr-deepak17](https://github.com/kr-deepak17)
 
-Project Repository: [Custom URL Shortener](https://github.com/kr-deepak17/Custom-url-shortner)
-
 ---
 
 <p align="center">
-  <b>Built from scratch with Node.js, Express.js, MongoDB, and EJS ❤️</b>
+  Built with ❤️ using Node.js, Express.js and MongoDB
 </p>
