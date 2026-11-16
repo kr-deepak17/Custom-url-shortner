@@ -22,7 +22,7 @@ async function checkAuth(req,res,next){
         
 
     }
-     const token =userUid.split("Bearer ")[1];
+    const token =userUid.split("Bearer ")[1];
 
     const user = getUser(token)
     req.user=user;
